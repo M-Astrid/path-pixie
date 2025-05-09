@@ -1,10 +1,7 @@
 import argparse
-import sys
 
+from path_pixie import TreeBuilder
 from path_pixie.common.const import DEFAULT_DEPTH
-from path_pixie.renderer.adapter.renderer import MDListRenderer
-from path_pixie.saver.adapter.file import FileOutputSaver
-from path_pixie.tree.adapter.composite import Project
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cute directory tree generator.")
@@ -16,15 +13,11 @@ if __name__ == "__main__":
 
     args = parser.parse_known_args()[0]
 
-    depth, output, root = args.depth, args.output, args.root
-
-    render = MDListRenderer()
-    project = Project(root)
-    tree = project.get_content(max_depth=depth)
-
-    formatted = render(tree, is_links=args.is_links, depth=depth)
-
-    if args.output:
-        FileOutputSaver(args.output)(formatted)
-    else:
-        sys.stdout.write(formatted)
+    TreeBuilder()(
+        dir_path=args.root,
+        depth=args.depth,
+        output=args.output,
+        dir_links=args.is_links,
+        file_links=args.is_links,
+        prefix=args.prefix,
+    )

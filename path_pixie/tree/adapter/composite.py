@@ -1,9 +1,9 @@
 import os
 
-from path_pixie.tree.port import Leaf, LeafContent
+from path_pixie.tree.port import Node, NodeInfo
 
 
-class FileLeaf(Leaf):
+class FileNode(Node):
     def __init__(self, name: str, dir_path: str, parent_depth: int = -1, max_depth: int = 0) -> None:
         self.name = name
         self.dir_path = dir_path
@@ -14,16 +14,26 @@ class FileLeaf(Leaf):
     def full_path(self) -> str:
         return f"{self.dir_path}/{self.name}"
 
-    def get_content(self) -> LeafContent:
-        return LeafContent(
-            name=self.name,
+    @property
+    def ext(self) -> str:
+        return os.path.splitext(self.name)[1]
+
+    @property
+    def raw_name(self) -> str:
+        return os.path.splitext(self.name)[0]
+
+    def get_content(self) -> NodeInfo:
+        return NodeInfo(
+            name=self.raw_name,
             dir_path=self.dir_path,
             full_path=self.full_path,
             depth=self.depth,
+            is_dir=False,
+            ext=self.ext,
         )
 
 
-class DirectoryLeaf(Leaf):
+class DirectoryNode(Node):
     def __init__(self, file_name: str, dir_path: str, max_depth: int, parent_depth: int = -1, name: str = None) -> None:
         self.name = name or file_name
         self.file_name = file_name
@@ -39,23 +49,24 @@ class DirectoryLeaf(Leaf):
     def files(self) -> list[str]:
         return os.listdir(self.full_path)
 
-    def get_content(self) -> LeafContent:
-        content = LeafContent(
+    def get_content(self) -> NodeInfo:
+        content = NodeInfo(
             name=self.file_name,
             dir_path=self.dir_path,
             full_path=self.full_path,
             depth=self.depth,
+            is_dir=True,
         )
         if self.depth == self.max_depth:
             return content
 
         for file in self.files:
             if os.path.isdir(f"{self.full_path}/{file}"):
-                leaf_content = DirectoryLeaf(
+                leaf_content = DirectoryNode(
                     file, self.full_path, max_depth=self.max_depth, parent_depth=self.depth
                 ).get_content()
             else:
-                leaf_content = FileLeaf(
+                leaf_content = FileNode(
                     file, self.full_path, max_depth=self.max_depth, parent_depth=self.depth
                 ).get_content()
             content.children.append(leaf_content)
@@ -75,6 +86,6 @@ class Project:
         # only_dirs: bool = False,
         # hide_ext: bool = True,
         max_depth: int,
-    ) -> LeafContent:
-        project = DirectoryLeaf(self.dir_path, ".", max_depth=max_depth)
+    ) -> NodeInfo:
+        project = DirectoryNode(self.dir_path, ".", max_depth=max_depth)
         return project.get_content()

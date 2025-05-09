@@ -1,17 +1,19 @@
+import abc
 from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import Protocol
 
 
 @dataclass
-class LeafContent:
+class NodeInfo:
     name: str
     dir_path: str
     full_path: str
     depth: int
-    children: list["LeafContent"] = field(default_factory=list)
+    is_dir: bool
+    ext: str = ""
+    children: list["NodeInfo"] = field(default_factory=list)
 
 
-class Leaf(Protocol):
+class Node(abc.ABC):
     @abstractmethod
-    def get_content(self) -> LeafContent: ...
+    def get_content(self) -> NodeInfo: ...

@@ -1,20 +1,19 @@
 import sys
 from typing import Any, Literal
 
-from path_pixie.renderer.adapter.renderer import MDListRenderer
+from path_pixie.renderer.adapter.mdlist.enums import Prefix
+from path_pixie.renderer.adapter.mdlist.renderer import MDListRenderer
 from path_pixie.saver.adapter.file import FileOutputSaver
-from path_pixie.tools.project_tree_generator.port import ITreeGenerator
+from path_pixie.tools.project_tree_builder.interface import ITreeBuilder
 from path_pixie.tree.adapter.composite import Project
 
 
-class TreeGenerator(ITreeGenerator):
-    async def __call__(
+class TreeBuilder(ITreeBuilder):
+    def __call__(
         self,
         dir_path: str,
-        max_depth: int = 2,
+        depth: int = 2,
         *,
-        name: str | None = None,
-        skip_first: bool = False,
         output: str | None = None,
         dir_links: bool = False,
         file_links: bool = True,
@@ -25,19 +24,23 @@ class TreeGenerator(ITreeGenerator):
         # exclude_exts: list[str] | None = None,
         # only_dirs: bool = False,
         # hide_ext: bool = True,
+        # name: str | None = None,
+        # skip_first: bool = False,
         **kwargs: Any,
     ) -> None:
-        project = Project("knowledge_base")
+        project = Project(dir_path)
         tree = project.get_content(
-            max_depth=max_depth,
+            max_depth=depth,
             # exts: list[str] | None = None,  # todo: implement
             # exclude_exts: list[str] | None = None,
             # only_dirs: bool = False,
             # hide_ext: bool = True,
         )
 
-        render = MDListRenderer()
-        formatted = render(tree, is_links=True, depth=max_depth)
+        render = MDListRenderer(prefix_type=Prefix(prefix))
+        formatted = render(
+            tree, is_links=True, depth=depth, signoff="Conjured by [path-pixie](https://github.com/path-pixie)"
+        )
 
         if output:
             FileOutputSaver(output, start_tag=start_tag, end_tag=end_tag)(formatted)
