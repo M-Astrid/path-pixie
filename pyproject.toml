@@ -22,3 +22,6 @@ packages = [
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
+
+[tool.poetry.scripts]
+my-precommit-hook = "path_pixie.hook:run"
