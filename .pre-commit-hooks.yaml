@@ -1,0 +1,4 @@
+-   id: path-pixie
+    name: path-pixie
+    language: python
+    entry: path_pixie

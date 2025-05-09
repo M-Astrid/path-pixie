@@ -1,16 +1,16 @@
 import argparse
-import sys
 
 from path_pixie.common.const import DEFAULT_DEPTH
 from path_pixie.renderer.adapter.renderer import MDListRenderer
 from path_pixie.saver.adapter.file import FileOutputSaver
 from path_pixie.tree.adapter.composite import Project
 
-if __name__ == "__main__":
+
+def run() -> None:
     parser = argparse.ArgumentParser(description="Cute directory tree generator.")
 
     parser.add_argument("--depth", type=int, default=DEFAULT_DEPTH, help="Максимальная глубина обхода.")
-    parser.add_argument("--output", type=str, default=None, help="Имя файла для вывода результата.")
+    parser.add_argument("--output", type=str, default="readme.md", help="Имя файла для вывода результата.")
     parser.add_argument("--root", type=str, default=".", help="Путь к корневой директории.")
     parser.add_argument("--is_links", type=bool, default=True, help="Ссылки вместо обычных текстовых имен.")
 
@@ -23,8 +23,6 @@ if __name__ == "__main__":
     tree = project.get_content(max_depth=depth)
 
     formatted = render(tree, is_links=args.is_links, depth=depth)
-
-    if args.output:
-        FileOutputSaver(args.output)(formatted)
-    else:
-        sys.stdout.write(formatted)
+    FileOutputSaver(output, start_tag="<!-- path-pixie contents start -->", end_tag="<!-- path-pixie contents end -->")(
+        formatted
+    )

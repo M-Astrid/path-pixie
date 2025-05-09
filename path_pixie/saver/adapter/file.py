@@ -8,12 +8,12 @@ class FileOutputSaver(OutputSaver):
     start_tag = "<!-- CONTENTS START -->"
     end_tag = "<!-- CONTENTS END -->"
 
-    def __init__(self, filename: str, start_tag: str = start_tag, end_tag: str = end_tag):
+    def __init__(self, filename: str, start_tag: str | None = None, end_tag: str | None = None):
         if not os.path.exists(filename):
             raise PathNotFound(f"File {filename} not found.")
         self.filename = filename
-        self.start_tag = start_tag
-        self.end_tag = end_tag
+        self.start_tag = start_tag or self.start_tag
+        self.end_tag = end_tag or self.end_tag
 
     def find_tags(self, content: str) -> tuple[int, int]:
         start = -1
