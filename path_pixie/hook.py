@@ -23,6 +23,6 @@ def run() -> None:
     tree = project.get_content(max_depth=depth)
 
     formatted = render(tree, is_links=args.is_links, depth=depth)
-    FileOutputSaver(
-        args.output, start_tag="<!-- path-pixie contents start -->", end_tag="<!-- path-pixie contents end -->"
-    )(formatted)
+    FileOutputSaver(output, start_tag="<!-- path-pixie contents start -->", end_tag="<!-- path-pixie contents end -->")(
+        formatted
+    )
