@@ -2,3 +2,4 @@
     name: path-pixie
     language: python
     entry: path_pixie
+    args: [--output, readme.md, --depth, "5", --prefix_type, "emoji"]

@@ -1,9 +1,7 @@
 import argparse
 
 from path_pixie.common.const import DEFAULT_DEPTH
-from path_pixie.renderer.adapter.renderer import MDListRenderer
-from path_pixie.saver.adapter.file import FileOutputSaver
-from path_pixie.tree.adapter.composite import Project
+from path_pixie.tools.project_tree_builder.impl import TreeBuilder
 
 
 def run() -> None:
@@ -13,16 +11,17 @@ def run() -> None:
     parser.add_argument("--output", type=str, default="readme.md", help="Имя файла для вывода результата.")
     parser.add_argument("--root", type=str, default=".", help="Путь к корневой директории.")
     parser.add_argument("--is_links", type=bool, default=True, help="Ссылки вместо обычных текстовых имен.")
+    parser.add_argument(
+        "--prefix", type=str, choices=("emoji", "bullet", "number"), default="bullet", help="Тип префиксов."
+    )
 
     args = parser.parse_known_args()[0]
 
-    depth, output, root = args.depth, args.output, args.root
-
-    render = MDListRenderer()
-    project = Project(root)
-    tree = project.get_content(max_depth=depth)
-
-    formatted = render(tree, is_links=args.is_links, depth=depth)
-    FileOutputSaver(output, start_tag="<!-- path-pixie contents start -->", end_tag="<!-- path-pixie contents end -->")(
-        formatted
+    TreeBuilder()(
+        dir_path=args.root,
+        depth=args.depth,
+        output=args.output,
+        dir_links=args.is_links,
+        file_links=args.is_links,
+        prefix=args.prefix,
     )

@@ -4,3 +4,7 @@ class InvalidTags(Exception):
 
 class PathNotFound(Exception):
     pass
+
+
+class UnknownPrefix(Exception):
+    pass
