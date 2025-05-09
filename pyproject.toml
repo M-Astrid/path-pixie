@@ -1,0 +1,24 @@
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "path-pixie"
+version = "0.1.0"
+description = "Cute project tree generator :fairy::sparkles:"
+authors = [
+  {name = "evgeniya.shumakova", email = "evgeniya.shumakova@ic-group.ru"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+]
+packages = [
+  {include = "path_pixie"}
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.2.0"
