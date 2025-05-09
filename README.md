@@ -70,3 +70,18 @@ Pre-commit hook example
   1. [python](./knowledge_base/python)  
     1. [async](./knowledge_base/python/async)  
 ----
+
+### Run from python
+```python
+from path_pixie import TreeBuilder
+
+build_tree = TreeBuilder()
+build_tree(
+        dir_path="root_dir",
+        depth=3,
+        output="output.txt",
+        dir_links=False,
+        file_links=True,
+        prefix="bullet",
+    )
+```
