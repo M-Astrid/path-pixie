@@ -76,5 +76,5 @@ class Project:
         # hide_ext: bool = True,
         max_depth: int,
     ) -> LeafContent:
-        project = DirectoryLeaf(self.dir_path, ".", max_depth=self.max_depth)
+        project = DirectoryLeaf(self.dir_path, ".", max_depth=max_depth)
         return project.get_content()
