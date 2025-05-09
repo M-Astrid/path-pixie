@@ -58,9 +58,6 @@ class MDListRenderer(Renderer):
 
         self.output += self.end_char
 
-        if content.depth == depth:
-            return self.output
-
         for child in content.children:
             self(child, is_links=is_links)
 
