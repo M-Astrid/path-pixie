@@ -1,4 +1,4 @@
 -   id: path-pixie
     name: path-pixie
-    language: python
-    entry: hook.py
+    language: system
+    entry: python path_pixie\hook.py
