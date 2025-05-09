@@ -1,0 +1,60 @@
+repos:
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.1
+    hooks:
+      - id: autoflake
+        name: autoflake
+        exclude: ^main.py,^test
+        entry: autoflake
+        language: python
+        "types": [ python ]
+        require_serial: true
+        args:
+          - "--in-place"
+          - "--expand-star-imports"
+          - "--remove-duplicate-keys"
+          - "--remove-unused-variables"
+          - "--remove-all-unused-imports"
+          - "--ignore-init-module-imports"
+          - "--exclude"
+          - "test_*"
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        args: [--line-length, "120"]
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+      - id: isort
+        name: isort
+        types: [ python ]
+        args: [ --profile, black, --line-length, "120" ]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        exclude: src/tests/|src/migrations/versions/
+        args: [--strict, --install-types, --non-interactive, --disable-error-code, 'misc', --disable-error-code, 'no-any-return', --disable-error-code, 'attr-defined', --disable-error-code, 'assignment', --ignore-missing-imports, --follow-imports=skip]
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        exclude: src/tests/|src/migrations/versions/
+        args: [ --max-line-length=120, ]
+  - repo: https://github.com/DanielNoord/pydocstringformatter
+    rev: v0.7.3
+    hooks:
+      - id: pydocstringformatter
+        name: pydocstringformatter
+        entry: pydocstringformatter --write --quiet
+        language: python
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.24.2
+    hooks:
+      - id: toml-sort-fix
+        name: toml-sort-fix
+        entry: toml-sort
+        args: [ --in-place ]
+        language: python
+        types: [ toml ]
