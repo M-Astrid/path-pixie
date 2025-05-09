@@ -8,5 +8,5 @@ Pre-commit hook example
     hooks:
       - id: path-pixie
         name: path-pixie
-        args: [--output, readme.md, --depth, "5"]
+        args: [--output, readme.md, --depth, "5", --root, "target_dir"]
 ```
